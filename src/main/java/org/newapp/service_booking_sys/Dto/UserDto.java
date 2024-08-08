@@ -1,17 +1,11 @@
-package org.newapp.service_booking_sys.Entity;
+package org.newapp.service_booking_sys.Dto;
 
-
-import jakarta.persistence.*;
 import lombok.Data;
-import org.newapp.service_booking_sys.Dto.UserDto;
+import org.newapp.service_booking_sys.Entity.User;
 import org.newapp.service_booking_sys.Enums.UserRole;
 
-@Entity
-@Table(name = "users")
 @Data
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class UserDto {
     private long id;
 
     private String email;
@@ -25,7 +19,6 @@ public class User {
     private String phone;
 
     private UserRole role;
-
     public UserDto getDto(){
         UserDto userDto = new UserDto();
         userDto.setId(id);
@@ -34,5 +27,4 @@ public class User {
         userDto.setRole(role);
         return userDto;
     }
-
 }
