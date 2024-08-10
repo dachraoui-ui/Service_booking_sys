@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
     @Autowired
     private AuthService authService;
+
     @PostMapping("/client/sign-up")
     public ResponseEntity<?> signupClient(@RequestBody SignUpRequestDTO signUpRequestDTO){
         if (authService.presentByEmail(signUpRequestDTO.getEmail())){
@@ -20,4 +21,13 @@ public class AuthenticationController {
         UserDto createUser = authService.signupClient(signUpRequestDTO);
         return new ResponseEntity<>(createUser,HttpStatus.OK);
     }
+    @PostMapping("/company/sign-up")
+    public ResponseEntity<?> signupCompany(@RequestBody SignUpRequestDTO signUpRequestDTO){
+        if (authService.presentByEmail(signUpRequestDTO.getEmail())){
+            return new ResponseEntity<>("Company already exists with this email ", HttpStatus.NOT_ACCEPTABLE);
+        }
+        UserDto createUser = authService.signupCompany(signUpRequestDTO);
+        return new ResponseEntity<>(createUser,HttpStatus.OK);
+    }
+
 }
