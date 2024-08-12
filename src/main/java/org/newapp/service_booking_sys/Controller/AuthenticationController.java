@@ -1,15 +1,26 @@
 package org.newapp.service_booking_sys.Controller;
 
 import jakarta.servlet.http.HttpServletResponse;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.newapp.service_booking_sys.Dto.AuthenticationRequest;
 import org.newapp.service_booking_sys.Dto.SignUpRequestDTO;
 import org.newapp.service_booking_sys.Dto.UserDto;
+import org.newapp.service_booking_sys.Entity.User;
+import org.newapp.service_booking_sys.Repository.UserRepository;
 import org.newapp.service_booking_sys.Service.Authentication.AuthService;
+import org.newapp.service_booking_sys.Service.Jwt.UserDetailsServiceImpl;
+import org.newapp.service_booking_sys.Util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 public class AuthenticationController {
@@ -18,6 +29,15 @@ public class AuthenticationController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public static final String TOKEN_PREFIX = "Bearer ";
 
@@ -39,11 +59,34 @@ public class AuthenticationController {
         UserDto createUser = authService.signupCompany(signUpRequestDTO);
         return new ResponseEntity<>(createUser,HttpStatus.OK);
     }
-    public void createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest, HttpServletResponse httpServletResponsef){
+    @PostMapping("/authenticate")
+    public void createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest, HttpServletResponse response) throws JSONException, IOException {
         try{
-            authenticationRequest.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),authenticationRequest.getPassword()));
+            authenticationManager.authenticate(new
+                    UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),authenticationRequest.getPassword()
+            ));
         }
-        catch ()
+        catch (BadCredentialsException e){
+            throw new BadCredentialsException("Incorrect username or password",e);
+        }
+
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+
+        final String jwt = jwtUtil.generateToken(userDetails.getUsername());
+        User user = userRepository.findFirstByEmail(authenticationRequest.getUsername());
+
+        response.getWriter().write(new JSONObject()
+                .put("userId",user.getId())
+                .put("role",user.getRole())
+                        .toString()
+                );
+
+        response.addHeader("Access-Control-Expose-Headers","Authorization");
+        response.addHeader("Access-Control-Allow-Headers","Authorization ," +
+                "X-PINGOTHER , Origin, X-Requested-With , Content-Type , Accept , X-Custom-header");
+
+        response.addHeader(HEADER_STRING,TOKEN_PREFIX+jwt);
     }
+
 
 }
