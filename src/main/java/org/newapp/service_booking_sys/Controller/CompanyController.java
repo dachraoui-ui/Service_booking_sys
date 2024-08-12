@@ -1,6 +1,6 @@
 package org.newapp.service_booking_sys.Controller;
 
-import org.apache.coyote.Response;
+
 import org.newapp.service_booking_sys.Dto.AdDTO;
 import org.newapp.service_booking_sys.Service.company.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,4 +26,38 @@ public class CompanyController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+    @GetMapping("/ads/{userId}")
+    public ResponseEntity<?> getAllAdsByUserId(@PathVariable Long userId){
+        return ResponseEntity.ok(companyService.getAllAds(userId));
+    }
+    @GetMapping("/ad/{adId}")
+    public ResponseEntity<?> getAdById(@PathVariable Long adId) {
+        AdDTO adDTO = companyService.getAdById(adId);
+        if (adDTO != null) {
+            return ResponseEntity.ok(adDTO);
+        }
+        else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+    @PostMapping("/ad/{adId}")
+    public ResponseEntity<?> updateAd(@PathVariable Long adId, @ModelAttribute AdDTO adDTO) throws IOException {
+        boolean success = companyService.updateAd(adId, adDTO);
+        if (success) {
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @DeleteMapping("/ad/{adId}")
+    public ResponseEntity<?> deleteAd(@PathVariable Long adId){
+        boolean success = companyService.deleteAd(adId);
+        if (success) {
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
 }
