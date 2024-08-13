@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ClientService {
     List<AdDTO> getAllAds();
+    List<AdDTO> searchAdByName(String name);
 }

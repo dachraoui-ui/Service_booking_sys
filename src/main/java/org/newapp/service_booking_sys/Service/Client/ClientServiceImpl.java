@@ -18,4 +18,7 @@ public class ClientServiceImpl implements ClientService {
     public List<AdDTO> getAllAds() {
         return adRepository.findAll().stream().map(Ad::getAdDTO).collect(Collectors.toList());
     }
+    public List<AdDTO> searchAdByName(String name){
+        return adRepository.findAllByServiceNameContaining(name).stream().map(Ad::getAdDTO).collect(Collectors.toList());
+    }
 }
