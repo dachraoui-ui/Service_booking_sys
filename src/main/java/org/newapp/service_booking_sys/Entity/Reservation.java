@@ -5,6 +5,7 @@ import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.newapp.service_booking_sys.Enums.ReservationStatus;
+import org.newapp.service_booking_sys.Enums.ReviewStatus;
 
 import java.util.Date;
 
