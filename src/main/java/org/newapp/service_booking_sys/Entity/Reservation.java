@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.newapp.service_booking_sys.Dto.ReservationDTO;
 import org.newapp.service_booking_sys.Enums.ReservationStatus;
 import org.newapp.service_booking_sys.Enums.ReviewStatus;
 
@@ -36,4 +37,18 @@ public class Reservation {
     @JoinColumn(name = "ad_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Ad ad;
+
+    public ReservationDTO getReservationDTO(){
+        ReservationDTO dto = new ReservationDTO();
+        dto.setId(id);
+        dto.setServiceName(ad.getServiceName());
+        dto.setBookDate(bookDate);
+        dto.setReservationStatus(reservationStatus);
+        dto.setReviewStatus(reviewStatus);
+        dto.setUserId(user.getId());
+        dto.setCompanyId(company.getId());
+        dto.setUserName(user.getName());
+
+        return dto;
+    }
 }
