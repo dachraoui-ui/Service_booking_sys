@@ -34,4 +34,8 @@ public class ClientController {
         }
     }
 
+    @GetMapping("/ad/{adId}")
+    public ResponseEntity<?> getAdDetailsByAdId(@PathVariable Long adId){
+        return ResponseEntity.ok(clientService.getAdDetailsByAdId(adId));
+    }
 }

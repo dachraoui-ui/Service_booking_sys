@@ -1,6 +1,7 @@
 package org.newapp.service_booking_sys.Service.Client;
 
 import org.newapp.service_booking_sys.Dto.AdDTO;
+import org.newapp.service_booking_sys.Dto.AdDetailsForClientDTO;
 import org.newapp.service_booking_sys.Dto.ReservationDTO;
 import org.newapp.service_booking_sys.Entity.Ad;
 import org.newapp.service_booking_sys.Entity.Reservation;
@@ -50,5 +51,14 @@ public class ClientServiceImpl implements ClientService {
             reservationRepository.save(reservation);
         }
         return false;
+    }
+
+    public AdDetailsForClientDTO getAdDetailsByAdId(Long adId){
+        Optional<Ad> optionalAd = adRepository.findById(adId);
+        AdDetailsForClientDTO adDetailsForClientDTO = new AdDetailsForClientDTO();
+        if(optionalAd.isPresent()){
+            adDetailsForClientDTO.setAdDTO(optionalAd.get().getAdDTO());
+        }
+        return adDetailsForClientDTO;
     }
 }
