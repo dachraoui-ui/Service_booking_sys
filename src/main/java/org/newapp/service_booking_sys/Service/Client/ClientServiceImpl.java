@@ -41,6 +41,7 @@ public class ClientServiceImpl implements ClientService {
     }
     public List<AdDTO> searchAdByName(String name){
         return adRepository.findAllByServiceNameContaining(name).stream().map(Ad::getAdDTO).collect(Collectors.toList());
+        //method to search for ad by name
     }
     public boolean bookService(ReservationDTO reservationDTO){
         Optional<Ad> optionalAd = adRepository.findById(reservationDTO.getAdId());
@@ -65,6 +66,9 @@ public class ClientServiceImpl implements ClientService {
         AdDetailsForClientDTO adDetailsForClientDTO = new AdDetailsForClientDTO();
         if(optionalAd.isPresent()){
             adDetailsForClientDTO.setAdDTO(optionalAd.get().getAdDTO());
+
+            List<Review> reviewList = reviewRepository.findAllByAdId(adId);
+            adDetailsForClientDTO.setReviewDTOList(reviewList.stream().map(Review::getDto).collect(Collectors.toList()));
         }
         return adDetailsForClientDTO;
     }
@@ -95,4 +99,5 @@ public class ClientServiceImpl implements ClientService {
         }
         return false;
     }
+
 }
