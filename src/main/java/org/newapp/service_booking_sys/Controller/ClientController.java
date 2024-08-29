@@ -9,12 +9,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.ref.Cleaner;
+
 @RestController
 @RequestMapping("/api/client")
 public class ClientController {
 
     @Autowired
     private ClientService clientService;
+
 
     @GetMapping("/ads")
     public ResponseEntity<?> getAllAds(){
