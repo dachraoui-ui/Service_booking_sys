@@ -107,7 +107,6 @@
             <artifactId>spring-cloud-function-web</artifactId>
         </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>

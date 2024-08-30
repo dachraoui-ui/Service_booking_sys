@@ -61,6 +61,7 @@ public class CompanyController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+    //add new endpoints
 
     @GetMapping("/bookings/{companyId}")
     public ResponseEntity<List<ReservationDTO>> getAllAdBookings(@PathVariable Long companyId){
