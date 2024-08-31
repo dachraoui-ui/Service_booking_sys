@@ -62,6 +62,7 @@ public class CompanyController {
         }
     }
     //add new endpoints
+    //get all bookings for a company
 
     @GetMapping("/bookings/{companyId}")
     public ResponseEntity<List<ReservationDTO>> getAllAdBookings(@PathVariable Long companyId){
