@@ -24,4 +24,5 @@ public class ReviewDTO {
     private String serviceName;
 
     private Long bookId;
+    // the dto 
 }
